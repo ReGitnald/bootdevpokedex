@@ -15,8 +15,7 @@ func commandExit(cfg *config) error {
 }
 
 func commandHelp(cfg *config) error {
-	fmt.Println("Welcome to the Pokedex!")
-	fmt.Println("Usage:\n")
+	fmt.Println("Welcome to the Pokedex!\nUsage:")
 	fmt.Println("help - Show available commands")
 	fmt.Println("exit - Exit the Pokedex")
 	return nil
@@ -29,7 +28,11 @@ func commandMap(cfg *config) error {
 	if cfg.Next != nil {
 		url = *cfg.Next
 	}
-	dat, _ := utils.GetPokedata(url)
+	dat, ok := cfg.cache.Get(url)
+	if !ok {
+		dat, _ = utils.GetPokedata(url)
+		cfg.cache.Add(url, dat)
+	}
 	loc := PokeLocation{}
 	err := json.Unmarshal(dat, &loc)
 	if err != nil {
@@ -49,7 +52,11 @@ func commandMapb(cfg *config) error {
 		return nil
 	}
 	url := *cfg.Previous
-	dat, _ := utils.GetPokedata(url)
+	dat, ok := cfg.cache.Get(url)
+	if !ok {
+		dat, _ = utils.GetPokedata(url)
+		cfg.cache.Add(url, dat)
+	}
 	loc := PokeLocation{}
 	err := json.Unmarshal(dat, &loc)
 	if err != nil {

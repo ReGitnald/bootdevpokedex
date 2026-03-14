@@ -4,6 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
+
+	"github.com/ReGitnald/pokedexcli/internal/pokecache"
 )
 
 type PokeLocation struct {
@@ -20,6 +23,7 @@ type config struct {
 	// Add any configuration fields you need here
 	Next     *string
 	Previous *string
+	cache    *pokecache.Cache
 }
 
 type cliCommand struct {
@@ -29,7 +33,9 @@ type cliCommand struct {
 }
 
 func main() {
-	cfg := &config{}
+	cfg := &config{
+		cache: pokecache.NewCache(5 * time.Second),
+	}
 	commands :=
 		map[string]cliCommand{
 			"exit": {

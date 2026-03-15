@@ -8,20 +8,20 @@ import (
 	"github.com/ReGitnald/pokedexcli/internal/utils"
 )
 
-func commandExit(cfg *config) error {
+func commandExit(cfg *config, args ...string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(cfg *config) error {
+func commandHelp(cfg *config, args ...string) error {
 	fmt.Println("Welcome to the Pokedex!\nUsage:")
 	fmt.Println("help - Show available commands")
 	fmt.Println("exit - Exit the Pokedex")
 	return nil
 }
 
-func commandMap(cfg *config) error {
+func commandMap(cfg *config, args ...string) error {
 	// TODO: Implement the map command to show the Pokemon world map
 
 	url := "https://pokeapi.co/api/v2/location-area/"
@@ -33,7 +33,7 @@ func commandMap(cfg *config) error {
 		dat, _ = utils.GetPokedata(url)
 		cfg.cache.Add(url, dat)
 	}
-	loc := PokeLocation{}
+	loc := utils.PokeLocation{}
 	err := json.Unmarshal(dat, &loc)
 	if err != nil {
 		fmt.Println(err)
@@ -46,7 +46,7 @@ func commandMap(cfg *config) error {
 	return nil
 }
 
-func commandMapb(cfg *config) error {
+func commandMapb(cfg *config, args ...string) error {
 	if cfg.Previous == nil {
 		fmt.Println("You're on the first page")
 		return nil
@@ -57,7 +57,7 @@ func commandMapb(cfg *config) error {
 		dat, _ = utils.GetPokedata(url)
 		cfg.cache.Add(url, dat)
 	}
-	loc := PokeLocation{}
+	loc := utils.PokeLocation{}
 	err := json.Unmarshal(dat, &loc)
 	if err != nil {
 		fmt.Println(err)
@@ -67,5 +67,9 @@ func commandMapb(cfg *config) error {
 	}
 	cfg.Next = &loc.Next
 	cfg.Previous = &loc.Previous
+	return nil
+}
+
+func commandExplore(cfg *config, args ...string) error {
 	return nil
 }

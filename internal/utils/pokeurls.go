@@ -6,9 +6,9 @@ import (
 	"net/http"
 )
 
-// func GetPokeLocationURL(id int) string {
-// 	return "https://pokeapi.co/api/v2/location-area/" + fmt.Sprint(id) + "/"
-// }
+func GetPokeLocationURL(name string) string {
+	return "https://pokeapi.co/api/v2/location-area/" + name + "/"
+}
 
 func GetPokedata(url string) ([]byte, error) {
 	res, err := http.Get(url)

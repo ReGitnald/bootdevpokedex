@@ -9,16 +9,6 @@ import (
 	"github.com/ReGitnald/pokedexcli/internal/pokecache"
 )
 
-type PokeLocation struct {
-	Count    int    `json:"count"`
-	Next     string `json:"next"`
-	Previous string `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	} `json:"results"`
-}
-
 type config struct {
 	// Add any configuration fields you need here
 	Next     *string
@@ -29,7 +19,7 @@ type config struct {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func main() {

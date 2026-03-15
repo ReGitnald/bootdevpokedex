@@ -7,13 +7,15 @@ import (
 	"time"
 
 	"github.com/ReGitnald/pokedexcli/internal/pokecache"
+	"github.com/ReGitnald/pokedexcli/internal/utils"
 )
 
 type config struct {
 	// Add any configuration fields you need here
-	Next     *string
-	Previous *string
-	cache    *pokecache.Cache
+	Next          *string
+	Previous      *string
+	cache         *pokecache.Cache
+	caughtPokemon map[string]utils.Pokemon
 }
 
 type cliCommand struct {
@@ -48,6 +50,16 @@ func main() {
 				description: "Show the map of the Pokemon world (backwards)",
 				callback:    commandMapb,
 			},
+			"explore": {
+				name:        "explore",
+				description: "Explore a specific location and list available Pokemon",
+				callback:    commandExplore,
+			},
+			"catch": {
+				name:        "catch",
+				description: "Attempt to catch a specific Pokemon",
+				callback:    commandCatch,
+			},
 		}
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
@@ -57,7 +69,8 @@ func main() {
 		words := cleanInput(text)
 		commandName, exists := commands[words[0]]
 		if exists {
-			err := commandName.callback(cfg)
+			args := words[1:]
+			err := commandName.callback(cfg, args...)
 			if err != nil {
 				fmt.Printf("Error executing command: %v\n", err)
 			}

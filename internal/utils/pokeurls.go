@@ -27,5 +27,5 @@ func GetPokedata(url string) ([]byte, error) {
 	return data, nil
 }
 func GetPokemonURL(name string) string {
-	return "https://pokeapi.co/api/v2/pokemon-species/" + name + "/"
+	return "https://pokeapi.co/api/v2/pokemon/" + name + "/"
 }

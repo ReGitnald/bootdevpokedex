@@ -28,6 +28,7 @@ func main() {
 	cfg := &config{
 		cache: pokecache.NewCache(5 * time.Second),
 	}
+	cfg.caughtPokemon = make(map[string]utils.Pokemon)
 	commands :=
 		map[string]cliCommand{
 			"exit": {
@@ -59,6 +60,16 @@ func main() {
 				name:        "catch",
 				description: "Attempt to catch a specific Pokemon",
 				callback:    commandCatch,
+			},
+			"inspect": {
+				name:        "inspect",
+				description: "Inspect a caught Pokemon for details",
+				callback:    commandInspect,
+			},
+			"pokedex": {
+				name:        "pokedex",
+				description: "List all caught Pokemon",
+				callback:    commandPokedex,
 			},
 		}
 	scanner := bufio.NewScanner(os.Stdin)

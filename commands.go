@@ -123,9 +123,9 @@ func commandCatch(cfg *config, args ...string) error {
 		fmt.Println(err)
 		return err
 	}
-	catchrate := pok.CaptureRate
+	catchrate := pok.BaseExperience
 	fmt.Println("Catch rate for ", pokemonName, ": ", catchrate)
-	if rand.Intn(256) <= catchrate {
+	if rand.Intn(catchrate) <= 40 {
 		fmt.Println("Congratulations! You caught ", pokemonName, "!")
 		cfg.caughtPokemon[pokemonName] = pok
 	} else {
@@ -142,9 +142,25 @@ func commandInspect(cfg *config, args ...string) error {
 	}
 	fmt.Println("Inspecting ", pokemonName, "...")
 	if pok, exists := cfg.caughtPokemon[pokemonName]; exists {
-		fmt.Printf("ID: %d\nName: %s\nOrder: %d\nGender Rate: %d\nCapture Rate: %d\n",
-			pok.ID, pok.Name, pok.Order, pok.GenderRate, pok.CaptureRate)
+		fmt.Printf("Name: %s\nHeight: %d\nWeight: %d\nStats:\n", pok.Name, pok.Height, pok.Weight)
+		for _, stat := range pok.Stats {
+			fmt.Printf("  -%s: %d\n", stat.Stat.Name, stat.BaseStat)
+		}
+		fmt.Println("Types:")
+		for _, pokeType := range pok.Types {
+			fmt.Printf("  -%s\n", pokeType.Type.Name)
+		}
 		return nil
+	} else {
+		fmt.Println("You haven't caught ", pokemonName, " yet!")
+	}
+	return nil
+}
+
+func commandPokedex(cfg *config, args ...string) error {
+	fmt.Println("Your Pokedex:")
+	for name := range cfg.caughtPokemon {
+		fmt.Println(" - ", name)
 	}
 	return nil
 }
